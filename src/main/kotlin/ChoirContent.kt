@@ -1,7 +1,3 @@
-import kotlin.reflect.KFunction
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.memberFunctions
-
 data class ChoirMember(val id : Int, val name: String){
     fun info() = println("id: $id  name: $name")
 }
@@ -10,11 +6,20 @@ class ChoirContent() : Webcontent {
     val memberList: MutableMap<Int, ChoirMember> = mutableMapOf<Int, ChoirMember>(
         1 to ChoirMember(1, "name"),
         2 to ChoirMember(2, "name2"),
-        3 to ChoirMember(3, "name3 ")
+        3 to ChoirMember(3, "name3")
     )
-
+    /*
     fun putMember(member: ChoirMember): ChoirMember {
         memberList[memberList.size + 1] = member
+        saveContent(memberList.values)
+        return member
+    }
+    */
+
+    fun putMember(id : Int, name : String): ChoirMember {
+        val member : ChoirMember = ChoirMember(id, name)
+        memberList[memberList.size + 1] = member
+        saveContent(memberList.values)
         return member
     }
 
@@ -26,9 +31,6 @@ class ChoirContent() : Webcontent {
         return  memberList[index]
     }
 
-    override fun saveContent() {
-
-    }
 
 
 }

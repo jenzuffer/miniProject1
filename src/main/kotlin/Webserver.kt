@@ -98,21 +98,33 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
     if (function == null) return null
     if (function.parameters.size > 1) {
         val p = function.parameters[1]
+        val p2 = function.parameters[2]
         //  println("p.type.classifier ${p.type.classifier}")
-        //println("parts[1]: ${parts[1]}")
-        when (p.type.classifier) {
-            Int::class -> {
-                val v1 = parts[1].toInt()
-                return function.call(content, v1)
-            }
+        println("parts[1]: ${parts[1]} p: ${p.type.classifier} p2: ${p2.type.classifier}")
+        if (p2 == null) {
+            when (p.type.classifier) {
+                Int::class -> {
+                    val v1 = parts[1].toInt()
+                    return function.call(content, v1)
+                }
+                else -> {
+                    val p1 = Gson().fromJson(parts[1], p.type.javaClass)
+                    return function.call(content, p1)
+                }
+            /*
             ChoirMember::class -> {
                 val s = parts[1].split("id=")[1]
                 val toInts : Int = s.split(",")[0].toInt()
                 val s1 = parts[1].split("name=")[1].split(")")[0]
                 val v1 : ChoirMember = ChoirMember(toInts, s1)
                 return function.call(content, v1)
+            } */
+                //else -> return null
             }
-            else -> return null
+        } else {
+            val p1 = parts[1].toInt()
+            val p2 = parts[2]
+            return function.call(content, p1, p2)
         }
     } else return function.call(content)
 }
@@ -122,6 +134,6 @@ fun main() {
     val content2 = DummyContent()
     val server = Webserver(content, 8080)
     //val server = Webserver(content2, 8080)
-    println(callFunction(content, Method.PUT, "/member/${ChoirMember(4, "name4")}"))
+    println(callFunction(content, Method.PUT, "/member/4/randomname"))
     server.start()
 }
