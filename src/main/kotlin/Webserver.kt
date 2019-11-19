@@ -98,10 +98,9 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
     if (function == null) return null
     if (function.parameters.size > 1) {
         val p = function.parameters[1]
-        val p2 = function.parameters[2]
         //  println("p.type.classifier ${p.type.classifier}")
-        println("parts[1]: ${parts[1]} p: ${p.type.classifier} p2: ${p2.type.classifier}")
-        if (p2 == null) {
+        println("parts[1]: ${parts[1]} p: ${p.type.classifier}")
+        if (methodName.contains("get")) {
             when (p.type.classifier) {
                 Int::class -> {
                     val v1 = parts[1].toInt()
@@ -121,10 +120,13 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
             } */
                 //else -> return null
             }
-        } else {
+        } else if (methodName.contains("put")) {
             val p1 = parts[1].toInt()
             val p2 = parts[2]
             return function.call(content, p1, p2)
+        }
+        else {
+            return null
         }
     } else return function.call(content)
 }
