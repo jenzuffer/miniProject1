@@ -13,8 +13,9 @@ class ChoirContent() : Webcontent {
         3 to ChoirMember(3, "name3 ")
     )
 
-    fun putMember(member: ChoirMember) {
-        memberList[memberList.size] = member
+    fun putMember(member: ChoirMember): ChoirMember {
+        memberList[memberList.size + 1] = member
+        return member
     }
 
     fun getMember(): List<ChoirMember> {
