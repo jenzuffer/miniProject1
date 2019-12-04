@@ -33,7 +33,12 @@ fun handle(request: Request, response: Reponse, content: Any){
                 choirmembers.add(member)
                 //println("member: $member")
             }
-            val jsonString: String = Gson().toJson(choirmembers)
+            val jsonString: String
+            jsonString = if (choirmembers.size > 1) {
+                Gson().toJson(choirmembers)
+            } else {
+                Gson().toJson(choirmembers[0])
+            }
             //println("jsonString: $jsonString"
             response.append("$jsonString")
         }else if (functioname.contains("DummyMember")){
@@ -50,7 +55,12 @@ fun handle(request: Request, response: Reponse, content: Any){
                 val member : DummyMember = DummyMember(toInts, s1, s2 as MutableList<Int>, s3)
                 choirmembers.add(member)
             }
-            val jsonString: String = Gson().toJson(choirmembers)
+            val jsonString: String
+            jsonString = if (choirmembers.size > 1) {
+                Gson().toJson(choirmembers)
+            } else {
+                Gson().toJson(choirmembers[0])
+            }
             //println("jsonString: $jsonString"
             response.append("$jsonString")
         }
