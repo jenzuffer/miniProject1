@@ -12,6 +12,7 @@ class Reponse(private val output: OutputStream) {
         val head = """
         HTTP/1.1 200 OK
         Content-Type: text/html; charset=UTF-8
+        Access-Control-Allow-Origin:*
         Content-Length: ${body.length}
         Connection: close
         
@@ -21,7 +22,7 @@ class Reponse(private val output: OutputStream) {
         val writer = output.bufferedWriter()
         writer.append(head)
         writer.newLine()
-        writer.append(body)
+        writer.append("$body")
         writer.close()
     }
 }

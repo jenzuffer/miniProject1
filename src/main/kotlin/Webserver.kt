@@ -19,8 +19,9 @@ fun handle(request: Request, response: Reponse, content: Any){
         println("callFunction: $callFunction")
         val parts : List<String> = callFunction.toString().split("(")
         val functioname : String = parts[0]
-        response.append(functioname)
+        //response.append(functioname)
         if (functioname.contains("ChoirMember")){
+            val choirmembers : MutableList<ChoirMember> = mutableListOf()
             for (part: String in parts) {
                 if (part == parts[0]){
                     continue
@@ -29,12 +30,14 @@ fun handle(request: Request, response: Reponse, content: Any){
                 val toInts : Int = s.split(",")[0].toInt()
                 val s1 = part.split("name=")[1].split(")")[0]
                 val member : ChoirMember = ChoirMember(toInts, s1)
+                choirmembers.add(member)
                 //println("member: $member")
-                val jsonString: String = Gson().toJson(member)
-                //println("jsonString: $jsonString")
-                response.append("$jsonString")
             }
+            val jsonString: String = Gson().toJson(choirmembers)
+            //println("jsonString: $jsonString"
+            response.append("$jsonString")
         }else if (functioname.contains("DummyMember")){
+            val choirmembers : MutableList<DummyMember> = mutableListOf()
             for (part: String in parts) {
                 if (part == parts[0]) {
                     continue
@@ -45,9 +48,11 @@ fun handle(request: Request, response: Reponse, content: Any){
                 val s2 : List<Int> = part.split("listOfInts=")[1].split("],")[0].map { it.toInt() }
                 val s3 : Float = part.split("randomFloat=")[1].split(")")[0].toFloat()
                 val member : DummyMember = DummyMember(toInts, s1, s2 as MutableList<Int>, s3)
-                val jsonString: String = Gson().toJson(member)
-                response.append("$jsonString")
+                choirmembers.add(member)
             }
+            val jsonString: String = Gson().toJson(choirmembers)
+            //println("jsonString: $jsonString"
+            response.append("$jsonString")
         }
         response.send()
     }
