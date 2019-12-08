@@ -16,6 +16,12 @@ class ChoirContent() : Webcontent {
     }
     */
 
+    fun postMember(name: String){
+        val member : ChoirMember = ChoirMember((memberList[memberList.size]?.id ?: memberList.size + 1) + 1, name)
+        memberList[memberList.size + 1] = member
+        saveContent(memberList.values)
+    }
+
     fun putMember(id : Int, name : String): ChoirMember {
         val member : ChoirMember = ChoirMember(id, name)
         memberList[memberList.size + 1] = member

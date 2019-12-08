@@ -17,7 +17,7 @@ class Reponse(private val output: OutputStream) {
         Connection: close
         
         """.trimIndent()
-        println("body: $body")
+        //println("body: $body")
         //PrintWriter(output, true).println("$body")
         val writer = output.bufferedWriter()
         writer.append(head)

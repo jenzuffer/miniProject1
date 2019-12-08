@@ -11,13 +11,10 @@ fun handle(request: Request, response: Reponse, content: Any){
     val str: String = request.resource
     val method : Method = request.method
     println("str: $str method: $method")
-
-    //dont use getcontent function at all, use reflection here instead
-    //val callFunction: Any? = callFunction(content, Method.GET, "/member/1")
-    val callFunction: Any? = callFunction(content, method, "$str")
-    if (callFunction != null){
-        println("callFunction: $callFunction")
-        val parts : List<String> = callFunction.toString().split("(")
+    val callFunctionval: Any? = callFunction(content, method, "$str")
+    if (callFunctionval != null){
+        println("callFunctionval found: $callFunctionval")
+        val parts : List<String> = callFunctionval.toString().split("(")
         val functioname : String = parts[0]
         //response.append(functioname)
         if (functioname.contains("ChoirMember")){
@@ -65,7 +62,7 @@ fun handle(request: Request, response: Reponse, content: Any){
             response.append("$jsonString")
         }
         response.send()
-    }
+    } else { println("failed callFunctionval")}
 }
 
 class Webserver (val content: Any, val port : Int = 8080){
@@ -96,17 +93,19 @@ fun listFunctions(content: Any) {
 
 fun callFunction(content: Any, method: Method, resource: String): Any? {
     val parts = resource.split("/").filter { !it.isEmpty() }
-    println("parts $parts")
+    //println("parts $parts")
     if (parts.isEmpty()) return null
     val methodName = method.toString().toLowerCase() + (parts[0].capitalize())
     println("methodName $methodName")
+    //println("content: ${content.toString()}")
     val type = content::class
     val function = type.declaredFunctions
-        .filter { it.name == methodName }
+        .filter { println("it name: ${it.name}")
+            it.name == methodName }
         .filter {
             //println("it param size: ${it.parameters.size} parts size: ${parts.size}")
             //println("it.parameters: " + it.parameters)
-            //println("it.parameters.size: ${it.parameters.size}, parts.size: ${parts.size}")
+            println("it.parameters.size: ${it.parameters.size}, parts.size: ${parts.size}")
             it.parameters.size == parts.size
         }
         .firstOrNull()
@@ -114,7 +113,7 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
     if (function.parameters.size > 1) {
         val p = function.parameters[1]
         //  println("p.type.classifier ${p.type.classifier}")
-        println("parts[1]: ${parts[1]} p: ${p.type.classifier}")
+        //println("parts[1]: ${parts[1]} p: ${p.type.classifier}")
         if (methodName.contains("get")) {
             when (p.type.classifier) {
                 Int::class -> {
@@ -139,6 +138,10 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
             val p1 = parts[1].toInt()
             val p2 = parts[2]
             return function.call(content, p1, p2)
+        }
+        else if (methodName.contains("post")) {
+            val p1 = parts[1]
+            return function.call(content, p1)
         }
         else {
             return null
