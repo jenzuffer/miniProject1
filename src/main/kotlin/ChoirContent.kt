@@ -17,12 +17,19 @@ class ChoirContent() : Webcontent {
     */
 
     fun deleteMember(id: Int){
-        memberList.remove(id)
+        var iterator : Int = 0
+        for (member : ChoirMember in memberList.values){
+            if (member.id == id){
+                memberList.remove(iterator)
+                break
+            }
+            iterator++
+        }
         saveContent(memberList.values)
     }
 
     fun postMember(name: String){
-        val member : ChoirMember = ChoirMember((memberList[memberList.size]?.id ?: memberList.size + 1) + 1, name)
+        val member : ChoirMember = ChoirMember(memberList.size + 1, name)
         memberList[memberList.size + 1] = member
         saveContent(memberList.values)
     }
@@ -30,7 +37,7 @@ class ChoirContent() : Webcontent {
     fun putMember(id : Int, name : String) {
         val member : ChoirMember = ChoirMember(id, name)
         memberList.remove(id)
-        memberList.put(memberList.size + 1, member)
+        memberList.put(id, member)
         saveContent(memberList.values)
     }
 
