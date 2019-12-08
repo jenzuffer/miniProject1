@@ -100,12 +100,12 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
     //println("content: ${content.toString()}")
     val type = content::class
     val function = type.declaredFunctions
-        .filter { println("it name: ${it.name}")
+        .filter { //println("it name: ${it.name}")
             it.name == methodName }
         .filter {
             //println("it param size: ${it.parameters.size} parts size: ${parts.size}")
             //println("it.parameters: " + it.parameters)
-            println("it.parameters.size: ${it.parameters.size}, parts.size: ${parts.size}")
+            //println("it.parameters.size: ${it.parameters.size}, parts.size: ${parts.size}")
             it.parameters.size == parts.size
         }
         .firstOrNull()
@@ -141,6 +141,10 @@ fun callFunction(content: Any, method: Method, resource: String): Any? {
         }
         else if (methodName.contains("post")) {
             val p1 = parts[1]
+            return function.call(content, p1)
+        }
+        else if (methodName.contains("delete")) {
+            val p1 = parts[1].toInt()
             return function.call(content, p1)
         }
         else {
