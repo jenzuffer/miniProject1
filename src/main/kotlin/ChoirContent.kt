@@ -1,52 +1,66 @@
-data class ChoirMember(val id : Int, val name: String){
+data class ChoirMember(val id : Int, var name: String){
     fun info() = println("id: $id  name: $name")
+
 }
 
 class ChoirContent() : Webcontent {
-    val memberList: MutableMap<Int, ChoirMember> = mutableMapOf<Int, ChoirMember>(
-        1 to ChoirMember(1, "name"),
-        2 to ChoirMember(2, "name2"),
-        3 to ChoirMember(3, "name3")
+    val memberList: MutableList<ChoirMember> = mutableListOf<ChoirMember>(
+        ChoirMember(1, "name"),
+        ChoirMember(2, "name2"),
+        ChoirMember(3, "name3")
     )
-    /*
-    fun putMember(member: ChoirMember): ChoirMember {
-        memberList[memberList.size + 1] = member
-        saveContent(memberList.values)
-        return member
-    }
-    */
 
     fun deleteMember(id: Int){
-        var iterator : Int = 0
-        for (member : ChoirMember in memberList.values){
+        var index : Int = 1
+        for (member : ChoirMember in memberList){
             if (member.id == id){
-                memberList.remove(iterator)
+                println("member name: ${member.name} id: $id")
+                memberList.remove(member)
                 break
             }
-            iterator++
+            index++
         }
-        saveContent(memberList.values)
+        saveContent(memberList)
     }
 
     fun postMember(name: String){
-        val member : ChoirMember = ChoirMember(memberList.size + 1, name)
-        memberList[memberList.size + 1] = member
-        saveContent(memberList.values)
+        var id : Int = 1
+        val sortedBy = memberList.sortedBy { it.id }
+        for (member : ChoirMember in sortedBy){
+            println("member id: ${member.id}")
+            if (member.id != id){
+                break
+            }
+            id++
+        }
+        val member : ChoirMember = ChoirMember(id, name)
+        memberList.add(member)
+        println("memberList size: ${memberList.size} name $name")
+        saveContent(memberList)
     }
 
     fun putMember(id : Int, name : String) {
-        val member : ChoirMember = ChoirMember(id, name)
-        memberList.remove(id)
-        memberList.put(id, member)
-        saveContent(memberList.values)
+        val member1 : ChoirMember = ChoirMember(id, name)
+        for (member : ChoirMember in memberList){
+            if (member.id == id){
+                member.name = "$name"
+                break
+            }
+        }
+        saveContent(memberList)
     }
 
     fun getMember(): List<ChoirMember> {
-        return memberList.values.toList()
+        return memberList.toList()
     }
 
     fun getMember(index: Int): ChoirMember? {
-        return  memberList[index]
+        for (member : ChoirMember in memberList){
+            if (member.id == index){
+                return member
+            }
+        }
+        return null
     }
 
 

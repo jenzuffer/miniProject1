@@ -158,6 +158,6 @@ fun main() {
     val content2 = DummyContent()
     val server = Webserver(content, 8080)
     //val server = Webserver(content2, 8080)
-    println(callFunction(content, Method.PUT, "/member/4/randomname"))
+    //println(callFunction(content, Method.PUT, "/member/4/randomname"))
     server.start()
 }
